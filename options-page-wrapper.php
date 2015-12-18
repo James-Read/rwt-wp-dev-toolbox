@@ -90,3 +90,34 @@ License: GPLv2
 	</div> <!-- /.poststuff -->
 </div> <!-- /.wrap -->
 <div class="clear"></div></div><!-- clear -->
+<?php /*
+function wp_dev_tool_box_display() {
+?>
+    <!-- Create a header in the default WordPress 'wrap' container -->
+    <div class="wrap">
+        <div id="icon-themes" class="icon32"></div>
+        <?php settings_errors(); ?>
+
+        <?php
+            $active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'display_options';{
+                $active_tab = $_GET[ 'tab' ];
+            } // end if
+        ?>
+        <h2 class="nav-tab-wrapper">
+            <a href="options-general.php?page=wp_developers_toolbox&tab=display_options" class="nav-tab <?php echo $active_tab == 'display_options' ? 'nav-tab-active' : ''; ?>">System Info</a>
+            <a href="options-general.php?page=wp_developers_toolbox&tab=tools_options" class="nav-tab <?php echo $active_tab == 'tools_options' ? 'nav-tab-active' : ''; ?>">Tools</a>
+        </h2>
+        <div class="wrap">
+		<?php
+			if( $active_tab == 'display_options' ) {
+				// Show all information, defaults to INFO_ALL
+				//phpinfo();
+			} else {
+        	echo 'display tools';
+        } // end if/else
+		?>
+    </div><!-- /.wrap -->
+<?php
+} // end wp_dev_tool_box_display
+?>
+<?php wp_dev_tool_box_display() */  ?>

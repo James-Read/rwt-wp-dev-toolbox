@@ -44,18 +44,6 @@ function wp_debug_mode_switch() {
         ini_set( 'display_errors', 0 );
 }//wp_debug_mode_switch();
 
-// add a link to plugin in the dashboard menu
-function debug_switcher_menu() {
-    add_options_page(
-        'WP Developers Toolbox',
-        'WP Developers Toolbox',
-        'manage_options',
-        'wp_developers_toolbox',
-        'wp_developers_toolbox_page'
-    );
-}
-add_action( 'admin_menu', 'debug_switcher_menu' );
-
 // Add a menu in the WP admin bar
 function debug_switch_menu() {
     global $wp_admin_bar;
@@ -230,4 +218,43 @@ function debug_switcher_logger() {
 }
 if ( $debug_switcher_log == 'on' ) {
     debug_switcher_logger();
+}
+
+// add a link to plugin in the dashboard menu
+// function debug_switcher_menu() {
+//     add_options_page(
+//         'WP Developers Toolbox',
+//         'WP Developers Toolbox',
+//         'manage_options',
+//         'wp_developers_toolbox',
+//         'wp_developers_toolbox_page'
+//     );
+// }
+// add_action( 'admin_menu', 'debug_switcher_menu' );
+
+function wp_dev_tool_box_menu(){
+  add_menu_page('WP Developers Toolbox', 'WP Developers Toolbox', 'manage_options', 'wp_developers_toolbox', 'wp_developers_toolbox_page');
+  add_submenu_page( 'wp_developers_toolbox', 'System Info', 'System Info', 'manage_options', 'system-info', 'rwt_system_info');
+  add_submenu_page( 'wp_developers_toolbox', 'Database Export', 'Database Export', 'manage_options', 'database-info', 'rwt_database_export');
+}
+add_action('admin_menu', 'wp_dev_tool_box_menu');
+
+function rwt_system_info(){
+                echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
+                <h2>System Info</h2>';
+                ob_start();
+                phpinfo();
+                $pinfo = ob_get_contents();
+                ob_end_clean();
+
+                $pinfo = preg_replace( '%^.*<body>(.*)</body>.*$%ms','$1',$pinfo);
+                echo $pinfo;
+                echo '</div>';
+}
+function rwt_database_export(){
+                echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
+                <h2>Database Info</h2></div>';
+                // Require db_backup.php
+                require_once( 'db_backup.php' );
+                //require_once($plugin_url . '/db_backup.php');
 }
