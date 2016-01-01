@@ -9,7 +9,7 @@ Author URI: https://readwebtechnology.com/
 License: GPLv2
 */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-//  Assign global variables
+// Assign global variables
 $plugin_url = plugins_url( '' , __FILE__ );
 $options = array();
 $display_json = false;
@@ -211,18 +211,6 @@ function rwt_debug_switcher_logger() {
 if ( $debug_switcher_log == 'on' ) {
     rwt_debug_switcher_logger();
 }
-
-// add a link to plugin in the dashboard menu
-// function rwt_debug_switcher_menu() {
-//     add_options_page(
-//         'WP Developers Toolbox',
-//         'WP Developers Toolbox',
-//         'manage_options',
-//         'wp_developers_toolbox',
-//         'wp_developers_toolbox_page'
-//     );
-// }
-// add_action( 'admin_menu', 'debug_switcher_menu' );
 
 function rwt_wp_dev_tool_box_menu(){
   add_menu_page('WP Developers Toolbox', 'WP Developers Toolbox', 'manage_options', 'wp_developers_toolbox', 'rwt_wp_developers_toolbox_page');
