@@ -60,8 +60,8 @@ function rwt_debug_switch_menu() {
     }
 
     $menu_id = 'debug_switch';
-    $wp_admin_bar->add_menu(array('id' => $menu_id, 'title' => __('Debug Switcher'), 'href' => admin_url( 'options-general.php?page=wp_developers_toolbox' )));
-    $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Debug Switcher Options'), 'id' => 'debug_switch_options', 'href' =>  admin_url( 'options-general.php?page=wp_developers_toolbox' )));
+    $wp_admin_bar->add_menu(array('id' => $menu_id, 'title' => __('Developer\'s Toolbox'), 'href' => admin_url( 'options-general.php?page=wp_developers_toolbox' )));
+    $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Developer\'s Toolbox : Options'), 'id' => 'debug_switch_options', 'href' =>  admin_url( 'options-general.php?page=wp_developers_toolbox' )));
     $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => 'Toggle Debug Mode : ' . $debug_toggle, 'id' => 'debug_switch_toggle', 'href'  => admin_url( 'options-general.php?page=wp_developers_toolbox&debug=toggle')));
     $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => 'Toggle WP Admin Bar to: ' . $admin_bar_toggle, 'id' => 'debug_wp_admin_toggle', 'href'  => admin_url( 'options-general.php?page=wp_developers_toolbox&wp_admin_bar=toggle')));
 }
@@ -213,7 +213,7 @@ if ( $debug_switcher_log == 'on' ) {
 }
 
 function rwt_wp_dev_tool_box_menu(){
-  add_menu_page('WP Developers Toolbox', 'WP Developers Toolbox', 'manage_options', 'wp_developers_toolbox', 'rwt_wp_developers_toolbox_page');
+  add_menu_page('Developer\'s Toolbox', 'WP Developer\'s Toolbox', 'manage_options', 'wp_developers_toolbox', 'rwt_wp_developers_toolbox_page');
   add_submenu_page( 'wp_developers_toolbox', 'System Info', 'System Info', 'manage_options', 'system-info', 'rwt_system_info');
   add_submenu_page( 'wp_developers_toolbox', 'Database Export', 'Database Export', 'manage_options', 'database-info', 'rwt_database_export');
 }

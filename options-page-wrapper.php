@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 ?>
 <div class="wrap">
 	<div id="icon-options-general" class="icon32"></div>
-	<h2>WP Developers Toolbox Plugin</h2>
+	<h2>WP Developer's Toolbox</h2>
 	<h3></h3>
 	<div id="poststuff">
 		<div id="post-body" class="metabox-holder columns-2">
@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 									    <input name="debug_switcher_log" type="radio" value="off" <?php if ( $debug_switcher_log == "off" ) { echo 'checked'; } ?>>Off (Defalut)
 									    <br>
 									    <?php if (file_exists(WP_CONTENT_DIR . '/debug.log' )) {?>
-										<a target="_blank" href="<?php echo site_url(); ?>/wp-content/debug.log">Open debug log file in a new tab</a>
+										<a target="_blank" href="<?php echo site_url(); ?>/wp-content/debug.log"> Click here to open the debug log file in a new tab</a>
 										<?php } ?>
 									</td>
 								</tr>
