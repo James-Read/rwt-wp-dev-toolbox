@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 						<h3><span>Read Web Technology - WordPress developer's toolbox</span></h3>
 						<div class="inside">
 							<form name="rwt_debug_switcher_options_class_form" method="post" action="">
+							<?php wp_nonce_field( 'update-debug-settings_' ); ?>
 							<input type="hidden" name="debug_switcher_form_submitted" value="Y">
 							<table class="form-table">
 								<tr>

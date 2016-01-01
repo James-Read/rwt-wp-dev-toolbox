@@ -1,7 +1,8 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-// rename plugins folder if /plugins exists and /plugins.origial does not
-	if( is_admin() && $came_from_plugin === 123321 ) {
+	//check if is admin and verify the nonce
+	if( is_admin() && wp_verify_nonce( $nonce, 'rename-plugin-dir' ) ) {
+		// rename plugins folder if /plugins exists and /plugins.origial does not
 		if (file_exists( WP_CONTENT_DIR . '/plugins' ) && !file_exists( WP_CONTENT_DIR . '/plugins.original' )) {
 	            rename( WP_CONTENT_DIR . '/plugins' , WP_CONTENT_DIR . '/plugins.original' );
 ?>

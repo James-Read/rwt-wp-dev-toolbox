@@ -15,13 +15,11 @@ $options = array();
 $display_json = false;
 // Include pluggable.php
 require_once(ABSPATH . 'wp-includes/pluggable.php');
-// Copy file for renaming the plugins directory function if it's not there
-if (!file_exists( WP_CONTENT_DIR . '/wp_toolbox_plugin_rename.php' )) {
-    $file = plugin_dir_path( __FILE__ ) . 'wp_toolbox_plugin_rename.php';
-    $newfile = WP_CONTENT_DIR . '/wp_toolbox_plugin_rename.php';
+// Copy file for renaming the plugins directory function
+    $file = plugin_dir_path( __FILE__ ) . 'rwt_toolbox_rename_plugins_dir.php';
+    $newfile = WP_CONTENT_DIR . '/rwt_toolbox_rename_plugins_dir.php';
 
     copy($file, $newfile);
-}
 // Turn on error reporting
 function rwt_wp_debug_mode_switch() {
 
@@ -63,13 +61,9 @@ function rwt_debug_switch_menu() {
 
     $menu_id = 'debug_switch';
     $wp_admin_bar->add_menu(array('id' => $menu_id, 'title' => __('Debug Switcher'), 'href' => admin_url( 'options-general.php?page=wp_developers_toolbox' )));
-    //$wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Debug Switcher Options'), 'id' => 'dwb-home', 'href' => '/', 'meta' => array('target' => '_blank')));
     $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Debug Switcher Options'), 'id' => 'debug_switch_options', 'href' =>  admin_url( 'options-general.php?page=wp_developers_toolbox' )));
     $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => 'Toggle Debug Mode : ' . $debug_toggle, 'id' => 'debug_switch_toggle', 'href'  => admin_url( 'options-general.php?page=wp_developers_toolbox&debug=toggle')));
     $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => 'Toggle WP Admin Bar to: ' . $admin_bar_toggle, 'id' => 'debug_wp_admin_toggle', 'href'  => admin_url( 'options-general.php?page=wp_developers_toolbox&wp_admin_bar=toggle')));
-
-    //$wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Drafts'), 'id' => 'dwb-drafts', 'href' => 'edit.php?post_status=draft&post_type=post'));
-    //$wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Pending Comments'), 'id' => 'dwb-pending', 'href' => 'edit-comments.php?comment_status=moderated'));
 }
 add_action('admin_bar_menu', 'rwt_debug_switch_menu', 2000);
 
@@ -101,6 +95,7 @@ function rwt_wp_developers_toolbox_page() {
     if( isset( $_POST['debug_switcher_form_submitted'] ) ) {
         $hidden_field = sanitize_text_field( $_POST['debug_switcher_form_submitted'] );
         if( $hidden_field == 'Y' ) {
+            check_admin_referer( 'update-debug-settings_' );
             $switch_option_on = sanitize_text_field( $_POST['switch_option_on'] );
             $admin_option = sanitize_text_field( $_POST['admin_option'] );
             $wp_admin_bar_option = sanitize_text_field( $_POST['wp_admin_bar_option'] );
@@ -113,7 +108,6 @@ function rwt_wp_developers_toolbox_page() {
             $options['wp_admin_bar_option'] = $wp_admin_bar_option;
             $options['debug_switcher_log'] = $debug_switcher_log;
             $options['delete_error_log'] = $delete_error_log;
-
             $options['last_updated'] = time();
 
             update_option( 'rwt_debug_switcher_options', $options );
@@ -121,12 +115,12 @@ function rwt_wp_developers_toolbox_page() {
     }
     // rename /plugins directory
     function rwt_rename_plugins_directory() {
-        $came_from_plugin = 123321;
-        require(WP_CONTENT_DIR . '/wp_toolbox_plugin_rename.php');
+        $nonce = wp_create_nonce( 'rename-plugin-dir' );
+        require(WP_CONTENT_DIR . '/rwt_toolbox_rename_plugins_dir.php');
         exit;
     }
     if ( $rename_plugins_directory == 'rename' ) {
-        rename_plugins_directory();
+        rwt_rename_plugins_directory();
     }
     $options = get_option( 'rwt_debug_switcher_options' );
     if( $options != '' ) {
@@ -142,7 +136,7 @@ function rwt_wp_developers_toolbox_page() {
         }
     }
     if ( $delete_error_log == 'delete' ) {
-        delete_error_log();
+        rwt_delete_error_log();
         $notification = '<h4>Error log deleted</h4>';
     }
 
@@ -254,5 +248,4 @@ function rwt_database_export(){
                 <h2>Database Info</h2></div>';
                 // Require db_backup.php
                 require_once( 'db_backup.php' );
-                //require_once($plugin_url . '/db_backup.php');
 }
