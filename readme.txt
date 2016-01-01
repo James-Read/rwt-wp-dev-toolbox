@@ -19,8 +19,8 @@ This handy plugin speeds up some tasks when developing web applications, website
 For more information visit : https://readwebtechnology.com/wp-developers-tool-box/
 
 
-* Toggle error prinring and logging on and off from the dashboard and the WP Admin bar *
-* Rename the plugins directory to quickly assertain if the error is in a plugin. *
+* Toggle error printing and logging on and off from the dashboard and the WP Admin bar *
+* Rename the plugins directory to quickly ascertain if the error is in a plugin. *
 * Toggle the WP Admin bar display on and off, from the WP Admin bar and dashboard *
 * Show System info using phpinfo *
 * Export the database to a .htaccess protected directory *
