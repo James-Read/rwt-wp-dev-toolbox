@@ -15,7 +15,7 @@ Installation process
 
 . Download the plugin HERE
 . Upload the plugin to your WordPress installation
-. At your WordPress dashboard, under WP Developers Toolbox choose your settings, view your system info or export your database
+. At your WordPress dashboard, under WP Developer's Toolbox choose your settings, view your system info or export your database
 
 ## Contributing
 
