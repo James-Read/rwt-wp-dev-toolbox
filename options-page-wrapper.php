@@ -3,7 +3,9 @@
 Author: James Read
 Author URI: https://readwebtechnology.com/
 License: GPLv2
-*/ ?>
+*/
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+?>
 <div class="wrap">
 	<div id="icon-options-general" class="icon32"></div>
 	<h2>WP Developers Toolbox Plugin</h2>
@@ -16,7 +18,7 @@ License: GPLv2
 					<div class="postbox">
 						<h3><span>Read Web Technology - WordPress developer's toolbox</span></h3>
 						<div class="inside">
-							<form name="debug_switcher_options_class_form" method="post" action="">
+							<form name="rwt_debug_switcher_options_class_form" method="post" action="">
 							<input type="hidden" name="debug_switcher_form_submitted" value="Y">
 							<table class="form-table">
 								<tr>
@@ -80,7 +82,7 @@ License: GPLv2
 								</tr>
 							</table>
 							<p>
-								<input class="button-primary" type="submit" name="debug_switcher_options_class_name_submit" value="Save" />
+								<input class="button-primary" type="submit" name="rwt_debug_switcher_options_class_name_submit" value="Save" />
 							</p>
 							</form>
 						</div> <!-- /.inside  test-->

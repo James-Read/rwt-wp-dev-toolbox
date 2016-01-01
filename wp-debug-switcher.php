@@ -8,25 +8,22 @@ Author: James Read
 Author URI: https://readwebtechnology.com/
 License: GPLv2
 */
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //  Assign global variables
-$plugin_url = WP_PLUGIN_URL . '/rwt-wp-dev-toolbox';
+$plugin_url = plugins_url( '' , __FILE__ );
 $options = array();
 $display_json = false;
 // Include pluggable.php
 require_once(ABSPATH . 'wp-includes/pluggable.php');
 // Copy file for renaming the plugins directory function if it's not there
 if (!file_exists( WP_CONTENT_DIR . '/wp_toolbox_plugin_rename.php' )) {
-    //die('dont exist');
     $file = plugin_dir_path( __FILE__ ) . 'wp_toolbox_plugin_rename.php';
     $newfile = WP_CONTENT_DIR . '/wp_toolbox_plugin_rename.php';
-    // echo 'file : '; echo $file;
-    // echo '<br>newfile : '; echo $newfile;
-    // die();
 
     copy($file, $newfile);
 }
 // Turn on error reporting
-function wp_debug_mode_switch() {
+function rwt_wp_debug_mode_switch() {
 
         error_reporting( E_ALL );
 
@@ -45,10 +42,10 @@ function wp_debug_mode_switch() {
 }//wp_debug_mode_switch();
 
 // Add a menu in the WP admin bar
-function debug_switch_menu() {
+function rwt_debug_switch_menu() {
     global $wp_admin_bar;
 
-    $options = get_option( 'debug_switcher_options' );
+    $options = get_option( 'rwt_debug_switcher_options' );
     $switch_option_on = $options['switch_option_on'];
     $show_admin_bar = $options['wp_admin_bar_option'];
     if ($switch_option_on == 'off') {
@@ -74,10 +71,10 @@ function debug_switch_menu() {
     //$wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Drafts'), 'id' => 'dwb-drafts', 'href' => 'edit.php?post_status=draft&post_type=post'));
     //$wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Pending Comments'), 'id' => 'dwb-pending', 'href' => 'edit-comments.php?comment_status=moderated'));
 }
-add_action('admin_bar_menu', 'debug_switch_menu', 2000);
+add_action('admin_bar_menu', 'rwt_debug_switch_menu', 2000);
 
 // the dashboard page
-function wp_developers_toolbox_page() {
+function rwt_wp_developers_toolbox_page() {
     if( !current_user_can( 'manage_options' ) ) {
         wp_die( 'You do not have sufficient permissions to access this page.' );
     }
@@ -87,28 +84,29 @@ function wp_developers_toolbox_page() {
     global $display_json;
 
     // default options
-    $options = get_option( 'debug_switcher_options' );
+    $options = get_option( 'rwt_debug_switcher_options' );
     if( $options == false ) {
         $options['switch_option_on'] = 'on';
         $options['admin_option'] = 'on';
         $options['wp_admin_bar_option'] = 'show_admin_bar';
         $options['debug_switcher_log'] = 'off';
+        $options['wp_admin_bar_option'] = 'show';
 
-        update_option( 'debug_switcher_options', $options );
+        update_option( 'rwt_debug_switcher_options', $options );
     }
     // reset rename plugins directory
     $options['rename_plugins_directory'] = 'off';
-    update_option( 'debug_switcher_options', $options );
+    update_option( 'rwt_debug_switcher_options', $options );
 
     if( isset( $_POST['debug_switcher_form_submitted'] ) ) {
-        $hidden_field = esc_html( $_POST['debug_switcher_form_submitted'] );
+        $hidden_field = sanitize_text_field( $_POST['debug_switcher_form_submitted'] );
         if( $hidden_field == 'Y' ) {
-            $switch_option_on = esc_html( $_POST['switch_option_on'] );
-            $admin_option = esc_html( $_POST['admin_option'] );
-            $wp_admin_bar_option = esc_html( $_POST['wp_admin_bar_option'] );
-            $debug_switcher_log = esc_html( $_POST['debug_switcher_log'] );
-            $delete_error_log = esc_html( $_POST['delete_error_log'] );
-            $rename_plugins_directory = esc_html( $_POST['rename_plugins_directory'] );
+            $switch_option_on = sanitize_text_field( $_POST['switch_option_on'] );
+            $admin_option = sanitize_text_field( $_POST['admin_option'] );
+            $wp_admin_bar_option = sanitize_text_field( $_POST['wp_admin_bar_option'] );
+            $debug_switcher_log = sanitize_text_field( $_POST['debug_switcher_log'] );
+            $delete_error_log = sanitize_text_field( $_POST['delete_error_log'] );
+            $rename_plugins_directory = sanitize_text_field( $_POST['rename_plugins_directory'] );
 
             $options['switch_option_on'] = $switch_option_on;
             $options['admin_option'] = $admin_option;
@@ -118,11 +116,11 @@ function wp_developers_toolbox_page() {
 
             $options['last_updated'] = time();
 
-            update_option( 'debug_switcher_options', $options );
+            update_option( 'rwt_debug_switcher_options', $options );
         }
     }
     // rename /plugins directory
-    function rename_plugins_directory() {
+    function rwt_rename_plugins_directory() {
         $came_from_plugin = 123321;
         require(WP_CONTENT_DIR . '/wp_toolbox_plugin_rename.php');
         exit;
@@ -130,7 +128,7 @@ function wp_developers_toolbox_page() {
     if ( $rename_plugins_directory == 'rename' ) {
         rename_plugins_directory();
     }
-    $options = get_option( 'debug_switcher_options' );
+    $options = get_option( 'rwt_debug_switcher_options' );
     if( $options != '' ) {
         $switch_option_on = $options['switch_option_on'];
         $admin_option = $options['admin_option'];
@@ -138,7 +136,7 @@ function wp_developers_toolbox_page() {
         $debug_switcher_log = $options['debug_switcher_log'];
     }
     // delete error log
-    function delete_error_log() {
+    function rwt_delete_error_log() {
         if (file_exists(WP_CONTENT_DIR . '/debug.log' )) {
         unlink( WP_CONTENT_DIR . '/debug.log' );
         }
@@ -151,8 +149,8 @@ function wp_developers_toolbox_page() {
     require( 'options-page-wrapper.php' );
 } // the dashboard page function
 // toggle debug mode from WP admin bar
-if ($_GET["debug"] == 'toggle') {
-    $options = get_option( 'debug_switcher_options' );
+if  ( sanitize_text_field( $_GET["debug"] == 'toggle') ) {
+    $options = get_option( 'rwt_debug_switcher_options' );
     $switch_option_on = $options['switch_option_on'];
     if ($switch_option_on == 'on') {
         $options['switch_option_on'] = 'off';
@@ -160,14 +158,14 @@ if ($_GET["debug"] == 'toggle') {
     if ($switch_option_on == 'off') {
         $options['switch_option_on'] = 'on';
     }
-    update_option( 'debug_switcher_options', $options );
+    update_option( 'rwt_debug_switcher_options', $options );
     if ( wp_get_referer() ) {
         wp_safe_redirect( wp_get_referer() );
     }
 }
 // toggle admin bar visability from WP admin bar
-if ($_GET["wp_admin_bar"] == 'toggle') {
-    $options = get_option( 'debug_switcher_options' );
+if  ( sanitize_text_field( $_GET["wp_admin_bar"] == 'toggle') ) {
+    $options = get_option( 'rwt_debug_switcher_options' );
     $show_admin_bar_options = $options['wp_admin_bar_option'];
     if ($show_admin_bar_options == 'show') {
         $options['wp_admin_bar_option'] = 'hide';
@@ -175,14 +173,14 @@ if ($_GET["wp_admin_bar"] == 'toggle') {
     if ($show_admin_bar_options == 'hide') {
         $options['wp_admin_bar_option'] = 'show';
     }
-    update_option( 'debug_switcher_options', $options );
+    update_option( 'rwt_debug_switcher_options', $options );
     if ( wp_get_referer() ) {
         wp_safe_redirect( wp_get_referer() );
     }
 }
 // switch debug mode on or off from dashboard settings
-function debug_switcher_options() {
-    $options = get_option( 'debug_switcher_options' );
+function rwt_rwt_debug_switcher_options() {
+    $options = get_option( 'rwt_debug_switcher_options' );
     if( $options != '' ) {
         $switch_option_on = $options['switch_option_on'];
         $admin_option = $options['admin_option'];
@@ -199,11 +197,11 @@ function debug_switcher_options() {
     }
     return $debug_switcher;
 }
-if ( debug_switcher_options() == true ) {
-    wp_debug_mode_switch();
+if ( rwt_rwt_debug_switcher_options() == true ) {
+    rwt_wp_debug_mode_switch();
 }
 // show admin bar / log errors from dashboard options
-$options = get_option( 'debug_switcher_options' );
+$options = get_option( 'rwt_debug_switcher_options' );
 $wp_admin_bar_option = $options['wp_admin_bar_option'];
 $debug_switcher_log = $options['debug_switcher_log'];
 
@@ -212,16 +210,16 @@ if ( $wp_admin_bar_option == 'hide' ) {
     show_admin_bar( false );
 }
 // turn on error logging
-function debug_switcher_logger() {
+function rwt_debug_switcher_logger() {
     ini_set( 'log_errors', 1 );
     ini_set( 'error_log', WP_CONTENT_DIR . '/debug.log' );
 }
 if ( $debug_switcher_log == 'on' ) {
-    debug_switcher_logger();
+    rwt_debug_switcher_logger();
 }
 
 // add a link to plugin in the dashboard menu
-// function debug_switcher_menu() {
+// function rwt_debug_switcher_menu() {
 //     add_options_page(
 //         'WP Developers Toolbox',
 //         'WP Developers Toolbox',
@@ -232,12 +230,12 @@ if ( $debug_switcher_log == 'on' ) {
 // }
 // add_action( 'admin_menu', 'debug_switcher_menu' );
 
-function wp_dev_tool_box_menu(){
-  add_menu_page('WP Developers Toolbox', 'WP Developers Toolbox', 'manage_options', 'wp_developers_toolbox', 'wp_developers_toolbox_page');
+function rwt_wp_dev_tool_box_menu(){
+  add_menu_page('WP Developers Toolbox', 'WP Developers Toolbox', 'manage_options', 'wp_developers_toolbox', 'rwt_wp_developers_toolbox_page');
   add_submenu_page( 'wp_developers_toolbox', 'System Info', 'System Info', 'manage_options', 'system-info', 'rwt_system_info');
   add_submenu_page( 'wp_developers_toolbox', 'Database Export', 'Database Export', 'manage_options', 'database-info', 'rwt_database_export');
 }
-add_action('admin_menu', 'wp_dev_tool_box_menu');
+add_action('admin_menu', 'rwt_wp_dev_tool_box_menu');
 
 function rwt_system_info(){
                 echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
