@@ -18,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 					<div class="postbox">
 						<h3><span>Read Web Technology - WordPress developer's toolbox</span></h3>
 						<div class="inside">
+							<p>It is advised you only use these settings within a development environment and not production.</p>
+							<p>Please note that these settings will not overrule some other error reporting configurations, for example on your system or using WP_DEBUG - see : <a href="https://codex.wordpress.org/WP_DEBUG" target="_blank">https://codex.wordpress.org/WP_DEBUG</a></p>
 							<form name="rwt_debug_switcher_options_class_form" method="post" action="">
 							<?php wp_nonce_field( 'update-debug-settings_' ); ?>
 							<input type="hidden" name="debug_switcher_form_submitted" value="Y">
@@ -29,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 									<td>
 										<input name="switch_option_on" type="radio" value="on" <?php if ( $switch_option_on == "on" ) { echo 'checked'; } ?>>On
 									    <br>
-									    <input name="switch_option_on" type="radio" value="off" <?php if ( $switch_option_on == "off" ) { echo 'checked'; } ?>>Off
+									    <input name="switch_option_on" type="radio" value="off" <?php if ( $switch_option_on == "off" ) { echo 'checked'; } ?>>Off (Defalut)
 									</td>
 								</tr>
 								<tr>
@@ -37,9 +39,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 										<label for="admin_option">Display errors to logged in admin users only : </label>
 									</td>
 									<td>
-										<input name="admin_option" type="radio" value="on" <?php if ( $admin_option == "on" ) { echo 'checked'; } ?>>On
+										<input name="admin_option" type="radio" value="on" <?php if ( $admin_option == "on" ) { echo 'checked'; } ?>>On (Defalut)
 									    <br>
-									    <input name="admin_option" type="radio" value="off" <?php if ( $admin_option == "off" ) { echo 'checked'; } ?>>Off !Not recomended
+									    <input name="admin_option" type="radio" value="off" <?php if ( $admin_option == "off" ) { echo 'checked'; } ?>>Off (Not recomended in production)
 									</td>
 								</tr>
 								<tr>
@@ -50,7 +52,11 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 									<td>
 										<input name="debug_switcher_log" type="radio" value="on" <?php if ( $debug_switcher_log == "on" ) { echo 'checked'; } ?>>On
 									    <br>
-									    <input name="debug_switcher_log" type="radio" value="off" <?php if ( $debug_switcher_log == "off" ) { echo 'checked'; } ?>>Off
+									    <input name="debug_switcher_log" type="radio" value="off" <?php if ( $debug_switcher_log == "off" ) { echo 'checked'; } ?>>Off (Defalut)
+									    <br>
+									    <?php if (file_exists(WP_CONTENT_DIR . '/debug.log' )) {?>
+										<a target="_blank" href="<?php echo site_url(); ?>/wp-content/debug.log">Open debug log file in a new tab</a>
+										<?php } ?>
 									</td>
 								</tr>
 								<tr>
@@ -58,16 +64,16 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 										<label for="delete_error_log">Delete log file : </label>
 									</td>
 									<td>
-										<input name="delete_error_log" type="checkbox" value="delete">Delete log file (cannot be undone!)
+										<input name="delete_error_log" type="checkbox" value="delete">Delete log file (Can not be undone!)
 										<?php if( $notification ) { echo $notification; }?><h4>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<label for="rename_plugins_directory">Rename plugins directory : </label>
+										<label for="rename_plugins_directory">Rename plugins directory : <br> To quickly see if there is an error in the plugins folder.</label>
 									</td>
 									<td>
-										<input name="rename_plugins_directory" type="checkbox" value="rename">Rename - to quickly see if your error is in the plugins folder
+										<input name="rename_plugins_directory" type="checkbox" value="rename">Rename /plugins to /plugins.original - Warning! This will disable all of your plugins. Ensure you have access to rename it back again.
 										<?php if( $notification_remame_plugins ) { echo $notification_remame_plugins; }?><h4>
 									</td>
 								</tr>
