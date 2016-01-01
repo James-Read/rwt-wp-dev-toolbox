@@ -67,22 +67,25 @@ function rwt_export_db() {
 	fclose($file);
 
 	$file_url = site_url() . '/wp-content/BACKUP_DIR'  . $file_name; ?>
-	<?php /* <a href="<?php echo $file_url; ?>" download>Download</a> */ ?>
-	<h2>Direct access is disabled with .htaccess for security - please use FTP / SSH to download</h2>
-	<?php /*  <h3>Url Path : <?php echo $file_url; ?></h3> */ ?>
+
+	<h2>Export complete!</h2>
 	<h3>File Path : <?php echo $file_path; ?></h3>
+	<h4>(Direct access is disabled with .htaccess for security - please use FTP / SSH to download)</h4>
+	<?php /*  <h3>Url Path : <?php echo $file_url; ?></h3> */ ?>
+	<?php /* <a href="<?php echo $file_url; ?>" download>Download</a> */ ?>
 <?php } // rwt_export_db ?>
 
 <form name="rwt_export_db" method="post" action="">
 	<?php wp_nonce_field( 'rwt-export-db_' ); ?>
 	<input type="hidden" name="rwt_export_db_form_submitted" value="Y">
+	<p>Click the Export button below to export every table in the current database, to a .sql file.<br> The file also includes “DROP TABLE IF EXISTS” for quick importing.</p>
 	<p>
 		<input class="button-primary" type="submit" name="rwt_export_db_submit" value="Export" />
 	</p>
 </form>
 
 
-<?php if( isset( $_POST['rwt_export_db_form_submitted'] ) ) { 
+<?php if( isset( $_POST['rwt_export_db_form_submitted'] ) ) {
     $hidden_field = sanitize_text_field( $_POST['rwt_export_db_form_submitted'] );
 	if( $hidden_field == 'Y' ) {
 	    check_admin_referer( 'rwt-export-db_' );
