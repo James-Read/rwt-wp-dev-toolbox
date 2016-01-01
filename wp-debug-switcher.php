@@ -80,7 +80,7 @@ function rwt_wp_developers_toolbox_page() {
     // default options
     $options = get_option( 'rwt_debug_switcher_options' );
     if( $options == false ) {
-        $options['switch_option_on'] = 'on';
+        $options['switch_option_on'] = 'off';
         $options['admin_option'] = 'on';
         $options['wp_admin_bar_option'] = 'show_admin_bar';
         $options['debug_switcher_log'] = 'off';
@@ -220,20 +220,19 @@ function rwt_wp_dev_tool_box_menu(){
 add_action('admin_menu', 'rwt_wp_dev_tool_box_menu');
 
 function rwt_system_info(){
-                echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
-                <h2>System Info</h2>';
-                ob_start();
-                phpinfo();
-                $pinfo = ob_get_contents();
-                ob_end_clean();
+    echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
+    <h2>System Info</h2>';
+    ob_start();
+    phpinfo();
+    $pinfo = ob_get_contents();
+    ob_end_clean();
 
-                $pinfo = preg_replace( '%^.*<body>(.*)</body>.*$%ms','$1',$pinfo);
-                echo $pinfo;
-                echo '</div>';
+    $pinfo = preg_replace( '%^.*<body>(.*)</body>.*$%ms','$1',$pinfo);
+    echo $pinfo;
+    echo '</div>';
 }
 function rwt_database_export(){
-                echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
-                <h2>Database Info</h2></div>';
-                // Require db_backup.php
-                require_once( 'db_backup.php' );
+    echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
+    <h2>Database Export</h2></div>';
+    require_once( 'db_backup.php' );
 }
