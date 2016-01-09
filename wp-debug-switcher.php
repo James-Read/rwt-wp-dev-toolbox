@@ -1,12 +1,14 @@
 <?php
 /*
-Plugin Name: WP Developers Toolbox
-Plugin URI: https://readwebtechnology.com/
-Description: WP Developers Toolbox
-Version: 1.0
-Author: James Read
-Author URI: https://readwebtechnology.com/
-License: GPLv2
+* Plugin Name: WP Developer's Toolbox
+* Plugin URI: https://readwebtechnology.com/
+* Description: WP Developers Toolbox
+* Version: 1.0
+* Text Domain: wp-debug-switcher
+* Domain Path: /lang
+* Author: James Read
+* Author URI: https://readwebtechnology.com/
+* License: GPLv2
 */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 // Assign global variables
@@ -15,6 +17,7 @@ $options = array();
 $display_json = false;
 // Include pluggable.php
 require_once(ABSPATH . 'wp-includes/pluggable.php');
+
 // Copy file for renaming the plugins directory function
     $file = plugin_dir_path( __FILE__ ) . 'rwt_toolbox_rename_plugins_dir.php';
     $newfile = WP_CONTENT_DIR . '/rwt_toolbox_rename_plugins_dir.php';
@@ -46,24 +49,29 @@ function rwt_debug_switch_menu() {
     $options = get_option( 'rwt_debug_switcher_options' );
     $switch_option_on = $options['switch_option_on'];
     $show_admin_bar = $options['wp_admin_bar_option'];
+    $on_label = __('ON', ‘wp-debug-switcher’);
+    $off_label = __('OFF', ‘wp-debug-switcher’);
+    $show_label = __('SHOW', ‘wp-debug-switcher’);
+    $hide_label = __('HIDE', ‘wp-debug-switcher’);
+
     if ($switch_option_on == 'off') {
-        $debug_toggle = 'ON';
+        $debug_toggle = $on_label;
     }
     if ($switch_option_on == 'on') {
-        $debug_toggle = 'OFF';
+        $debug_toggle = $on_label;
     }
     if ($show_admin_bar == 'hide') {
-        $admin_bar_toggle = 'SHOW';
+        $admin_bar_toggle = $show_label;
     }
     if ($show_admin_bar == 'show') {
-        $admin_bar_toggle = 'HIDE';
+        $admin_bar_toggle = $hide_label;
     }
 
     $menu_id = 'debug_switch';
-    $wp_admin_bar->add_menu(array('id' => $menu_id, 'title' => __('Developer\'s Toolbox'), 'href' => admin_url( 'options-general.php?page=wp_developers_toolbox' )));
-    $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Developer\'s Toolbox : Options'), 'id' => 'debug_switch_options', 'href' =>  admin_url( 'options-general.php?page=wp_developers_toolbox' )));
-    $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => 'Toggle Debug Mode : ' . $debug_toggle, 'id' => 'debug_switch_toggle', 'href'  => admin_url( 'options-general.php?page=wp_developers_toolbox&debug=toggle')));
-    $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => 'Toggle WP Admin Bar to: ' . $admin_bar_toggle, 'id' => 'debug_wp_admin_toggle', 'href'  => admin_url( 'options-general.php?page=wp_developers_toolbox&wp_admin_bar=toggle')));
+    $wp_admin_bar->add_menu(array('id' => $menu_id, 'title' => __('Developer\'s Toolbox', ‘wp-debug-switcher’), 'href' => admin_url( 'options-general.php?page=wp_developers_toolbox' )));
+    $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Developer\'s Toolbox : Options', ‘wp-debug-switcher’), 'id' => 'debug_switch_options', 'href' =>  admin_url( 'options-general.php?page=wp_developers_toolbox' )));
+    $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' =>  __('Toggle Debug Mode : ', ‘wp-debug-switcher’) . $debug_toggle, 'id' => 'debug_switch_toggle', 'href'  => admin_url( 'options-general.php?page=wp_developers_toolbox&debug=toggle')));
+    $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Toggle WP Admin Bar to: ', ‘wp-debug-switcher’) . $admin_bar_toggle, 'id' => 'debug_wp_admin_toggle', 'href'  => admin_url( 'options-general.php?page=wp_developers_toolbox&wp_admin_bar=toggle')));
 }
 add_action('admin_bar_menu', 'rwt_debug_switch_menu', 2000);
 
@@ -213,15 +221,20 @@ if ( $debug_switcher_log == 'on' ) {
 }
 
 function rwt_wp_dev_tool_box_menu(){
-  add_menu_page('Developer\'s Toolbox', 'WP Developer\'s Toolbox', 'manage_options', 'wp_developers_toolbox', 'rwt_wp_developers_toolbox_page');
-  add_submenu_page( 'wp_developers_toolbox', 'System Info', 'System Info', 'manage_options', 'system-info', 'rwt_system_info');
-  add_submenu_page( 'wp_developers_toolbox', 'Database Export', 'Database Export', 'manage_options', 'database-info', 'rwt_database_export');
+  $developers_toolbox_title = __( 'WP Developer\'s Toolbox', ‘wp-debug-switcher’ );
+  $system_info_title = __( 'System Info', ‘wp-debug-switcher’ );
+  $database_export_title = __( 'Database Export', ‘wp-debug-switcher’ );
+
+  add_menu_page($developers_toolbox_title , $developers_toolbox_title , 'manage_options', 'wp_developers_toolbox', 'rwt_wp_developers_toolbox_page');
+  add_submenu_page( 'wp_developers_toolbox', $system_info_title , $system_info_title , 'manage_options', 'system-info', 'rwt_system_info');
+  add_submenu_page( 'wp_developers_toolbox', $database_export_title , $database_export_title , 'manage_options', 'database-info', 'rwt_database_export');
 }
 add_action('admin_menu', 'rwt_wp_dev_tool_box_menu');
 
 function rwt_system_info(){
+    $system_info_title = __( 'System Info', ‘wp-debug-switcher’ );
     echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
-    <h2>System Info</h2>';
+    <h2>'.$system_info_title.'</h2>';
     ob_start();
     phpinfo();
     $pinfo = ob_get_contents();
@@ -232,7 +245,8 @@ function rwt_system_info(){
     echo '</div>';
 }
 function rwt_database_export(){
+    $database_export_title = __( 'Database Export', ‘wp-debug-switcher’ );
     echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
-    <h2>Database Export</h2></div>';
+    <h2>'.$database_export_title.'</h2></div>';
     require_once( 'db_backup.php' );
 }

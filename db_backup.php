@@ -68,9 +68,9 @@ function rwt_export_db() {
 
 	$file_url = site_url() . '/wp-content/BACKUP_DIR'  . $file_name; ?>
 
-	<h2>Export complete!</h2>
-	<h3>File Path : <?php echo $file_path; ?></h3>
-	<h4>(Direct access is disabled with .htaccess for security - please use FTP / SSH to download)</h4>
+	<h2><?php _e( 'Export complete!', ‘wp-debug-switcher’ ) ?></h2>
+	<h3><?php _e( 'File Path : ', ‘wp-debug-switcher’ ) ?><?php echo $file_path; ?></h3>
+	<h4><?php _e( '(Direct access is disabled with .htaccess for security - please use FTP / SSH to download)', ‘wp-debug-switcher’ ) ?></h4>
 	<?php /*  <h3>Url Path : <?php echo $file_url; ?></h3> */ ?>
 	<?php /* <a href="<?php echo $file_url; ?>" download>Download</a> */ ?>
 <?php } // rwt_export_db ?>
@@ -78,12 +78,11 @@ function rwt_export_db() {
 <form name="rwt_export_db" method="post" action="">
 	<?php wp_nonce_field( 'rwt-export-db_' ); ?>
 	<input type="hidden" name="rwt_export_db_form_submitted" value="Y">
-	<p>Click the Export button below to export every table in the current database, to a .sql file.<br> The file also includes “DROP TABLE IF EXISTS” for quick importing.</p>
+	<p><?php _e( 'Click the Export button below to export every table in the current database, to a .sql file.', ‘wp-debug-switcher’ ) ?><br><?php _e( ' The file also includes “DROP TABLE IF EXISTS” for quick importing.', ‘wp-debug-switcher’ ) ?></p>
 	<p>
-		<input class="button-primary" type="submit" name="rwt_export_db_submit" value="Export" />
+		<input class="button-primary" type="submit" name="rwt_export_db_submit" value="<?php _e( 'Export', ‘wp-debug-switcher’ ) ?>" />
 	</p>
 </form>
-
 
 <?php if( isset( $_POST['rwt_export_db_form_submitted'] ) ) {
     $hidden_field = sanitize_text_field( $_POST['rwt_export_db_form_submitted'] );
