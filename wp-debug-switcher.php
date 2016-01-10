@@ -5,12 +5,18 @@
 * Description: WP Developers Toolbox
 * Version: 1.0
 * Text Domain: wp-debug-switcher
-* Domain Path: /lang
+* Domain Path: /lang/
 * Author: James Read
 * Author URI: https://readwebtechnology.com/
 * License: GPLv2
 */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+function load_plugin_textdomain() {
+  load_plugin_textdomain( 'wp-debug-switcher', FALSE, basename( dirname( __FILE__ ) ) . '/lang/' );
+}
+add_action( 'plugins_loaded', 'load_plugin_textdomain' );
+
 // Assign global variables
 $plugin_url = plugins_url( '' , __FILE__ );
 $options = array();
