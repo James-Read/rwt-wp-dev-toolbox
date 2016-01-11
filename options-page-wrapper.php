@@ -45,6 +45,23 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 								</tr>
 								<tr>
 									<td>
+										<label for="current_ip_address"><?php _e( 'Your current client IP address is : ', ‘wp-debug-switcher’ ) ?> </label>
+									</td>
+									<td>
+										<?php echo rwt_get_user_ip(); ?>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<br><label for="white_listed_ip"><?php _e( 'Whitelisted IP address :', ‘wp-debug-switcher’ ) ?> </label>
+										<p>View errors, without needing to sign in as an administrator.</p>
+									</td>
+									<td>
+										<input name="white_listed_ip" type="input" value="<?php echo $white_listed_ip; ?>">
+								    </td>
+								</tr>
+								<tr>
+									<td>
 										<label for="debug_switcher_log"><?php _e( 'Print errors to a log file : ', ‘wp-debug-switcher’ ) ?></label>
 										<p>/wp-content/debug.log</p>
 									</td>
