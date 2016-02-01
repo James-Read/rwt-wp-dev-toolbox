@@ -10,14 +10,15 @@
 * Author URI: https://readwebtechnology.com/
 * License: GPLv2
 */
+namespace rwtToolbox;
+
 // Exit if accessed directly
 if (! defined('ABSPATH')) {
     exit;
 }
 require_once(ABSPATH . 'wp-includes/pluggable.php');
 $plugin_url = plugins_url('', __FILE__);
-
-class rwtToolboxOptions
+class RwtToolboxOptions
 {
     public $debug_mode;
     public $public_view_errors;
@@ -26,7 +27,6 @@ class rwtToolboxOptions
     public $white_listed_ip;
     public $delete_error_log;
     public $name;
-
     protected function __construct()
     {
         $this->debug_mode = $debug_mode;
@@ -41,7 +41,7 @@ class rwtToolboxOptions
     // Get options from database
     public function rwtGetOptions()
     {
-        $options = get_option('rwtToolboxOptions');
+        $options = get_option('RwtToolboxOptions');
         if ($options != false) {
             $this->debug_mode = $options->params->debug_mode;
             $this->public_view_errors = $options->params->public_view_errors;
@@ -54,8 +54,8 @@ class rwtToolboxOptions
     // Submit options
     public function rwtSubmitOptions()
     {
-        if (isset($_POST['rwtToolboxOptions_form_submitted'])) {
-            $hidden_field = sanitize_text_field($_POST['rwtToolboxOptions_form_submitted']);
+        if (isset($_POST['RwtToolboxOptions_form_submitted'])) {
+            $hidden_field = sanitize_text_field($_POST['RwtToolboxOptions_form_submitted']);
             if ($hidden_field == 'Y') {
                 check_admin_referer('update-debug-settings_');
                 $this->debug_mode = sanitize_text_field($_POST['debug_mode']);
@@ -73,8 +73,8 @@ class rwtToolboxOptions
     // Set options
     public function rwtSetOptions()
     {
-        //$this->rwt_options = new rwtToolboxOptions();
-        $this->rwt_options->name = 'rwtToolboxOptions';
+        //$this->rwt_options = new RwtToolboxOptions();
+        $this->rwt_options->name = 'RwtToolboxOptions';
         $this->rwt_options->params->debug_mode = $this->debug_mode;
         $this->rwt_options->params->public_view_errors = $this->public_view_errors;
         $this->rwt_options->params->debug_log = $this->debug_log;
@@ -86,17 +86,15 @@ class rwtToolboxOptions
     // Update options
     public function rwtUpdateOptions()
     {
-        update_option('rwtToolboxOptions', $this->rwtSetOptions());
+        update_option('RwtToolboxOptions', $this->rwtSetOptions());
     }
-}// class rwtToolboxOptions
-
+}// class RwtToolboxOptions
 class rwtDevToolbox
 {
     public $user_ip;
     public $user_ip_match;
     public $debug_switcher;
     public $admin_option;
-
     protected function __construct()
     {
         $this->user_ip = 'false';
@@ -104,7 +102,6 @@ class rwtDevToolbox
         $this->debug_switcher = 'false';
         $this->admin_option = 'false';
     }
-
     protected function rwtGetUtilities()
     {
         $this->user_ip = 'false';
@@ -112,16 +109,13 @@ class rwtDevToolbox
         $this->debug_switcher = 'false';
         $this->admin_option = 'false';
     }
-
     // Copy file for renaming the plugins directory function
     public function rwtAddRenamePluginsFile()
     {
         $file = plugin_dir_path(__FILE__) . 'rwt_toolbox_rename_plugins_dir.php';
         $newfile = WP_CONTENT_DIR . '/rwt_toolbox_rename_plugins_dir.php';
-
         copy($file, $newfile);
     }
-
     // Error reporting
     public function rwtDebugMode()
     {
@@ -129,7 +123,6 @@ class rwtDevToolbox
         ini_set('display_errors', 1);
         error_reporting(E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR);
     }// Error reporting
-
     // White list IP address to view errors
     // Get user's IP address
     public function rwtGetUserIp()
@@ -149,7 +142,7 @@ class rwtDevToolbox
     // Match the IP
     public function rwtTestIp()
     {
-        $rwt_toolbox_opts = new rwtToolboxOptions('false', 'false', 'false', 'false', '', 'false', 'rwtToolboxOptions');
+        $rwt_toolbox_opts = new RwtToolboxOptions('false', 'false', 'false', 'false', '', 'false', 'RwtToolboxOptions');
         if ($this->user_ip == $rwt_toolbox_opts->white_listed_ip) {
             $this->user_ip_match = 'true';
         }
@@ -178,7 +171,6 @@ class rwtDevToolbox
         phpinfo();
         $pinfo = ob_get_contents();
         ob_end_clean();
-
         $pinfo = preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $pinfo);
         echo $pinfo;
         echo '</div>';
@@ -192,7 +184,7 @@ class rwtDevToolbox
     }
     // // switch debug mode on or off from dashboard settings
     // public function rwt_debug_switcher_options() {
-    //     $rwt_toolbox_opts = new rwtToolboxOptions();
+    //     $rwt_toolbox_opts = new RwtToolboxOptions();
     //     $this->debug_switcher = false;
     //     $debug_mode = $rwt_toolbox_opts->debug_mode;
     //     $public_view_errors = $rwt_toolbox_opts->public_view_errors;
@@ -212,16 +204,16 @@ class rwtDevToolbox
     //     return $this->debug_switcher;
     // }
     // Delete error log
-    public function rwt_delete_error_log()
+    public function rwtDeleteErrorLog()
     {
         if (file_exists(WP_CONTENT_DIR . '/debug.log')) {
             unlink(WP_CONTENT_DIR . '/debug.log');
         }
     }
     // The switching logic
-    public function rwt_toolbox_switcher()
+    public function rwtToolboxSwitcher()
     {
-        $rwt_toolbox_opts = new rwtToolboxOptions('false', 'false', 'false', 'false', '', 'false', 'rwtToolboxOptions');
+        $rwt_toolbox_opts = new RwtToolboxOptions('false', 'false', 'false', 'false', '', 'false', 'RwtToolboxOptions');
         $rwt_toolbox_utilities = new rwtDevToolbox();
         // if ($rename_plugins_directory == 'rename') {
         //     rwtRenamePluginsDirectory();
@@ -229,9 +221,8 @@ class rwtDevToolbox
         // if ($debug_switcher_log == 'on') {
         //     rwt_debug_switcher_logger();
         // }
-
         // if ($delete_error_log == 'delete') {
-        //     rwt_delete_error_log();
+        //     rwtDeleteErrorLog();
         //     $notification = '<h4>Error log deleted</h4>';
         // }
         // var_dump($rwt_toolbox_opts);
@@ -254,7 +245,7 @@ class rwtDevToolbox
             $rwt_toolbox_utilities->rwtDebugLogger();
         }
         if ($rwt_toolbox_opts->delete_error_log === 'delete') {
-            $rwt_toolbox_utilities->rwt_delete_error_log();
+            $rwt_toolbox_utilities->rwtDeleteErrorLog();
             $notification = '<h4>Error log deleted</h4>';
         }
         // Hide the admin bar
@@ -263,18 +254,16 @@ class rwtDevToolbox
         }
     }
 }// class rwtDevToolbox
-
 function rwt_options_page()
 {
     if (!current_user_can('manage_options')) {
         wp_die('You do not have sufficient permissions to access this page.');
     }
-    $rwt_toolbox = new rwtToolboxOptions('false', 'false', 'false', 'false', '', 'false', 'rwtToolboxOptions');
+    $rwt_toolbox = new RwtToolboxOptions('false', 'false', 'false', 'false', '', 'false', 'RwtToolboxOptions');
     $rwt_toolbox->rwtGetOptions();
     $rwt_toolbox->rwtSetOptions();
     $rwt_toolbox->rwtSubmitOptions();
     $rwt_toolbox->rwtUpdateOptions();
-
     $rwt_toolbox_utilities = new rwtDevToolbox();
     // $rwt_toolbox_utilities->rwtAddRenamePluginsFile();
     // $rwt_toolbox_utilities->rwtGetUserIp();
@@ -285,19 +274,16 @@ function rwt_options_page()
     //var_dump($rwt_toolbox_utilities);
     require('options-page-wrapper.php');
 }
-
 function rwt_wp_dev_tool_box_menu()
 {
     $developers_toolbox_title = __('WP Developer\'s Toolbox', ‘wp-debug-switcher’);
     $system_info_title = __('System Info', ‘wp-debug-switcher’);
     $database_export_title = __('Database Export', ‘wp-debug-switcher’);
-
     add_menu_page($developers_toolbox_title, $developers_toolbox_title, 'manage_options', 'wp_developers_toolbox', 'rwt_options_page');
     add_submenu_page('wp_developers_toolbox', $system_info_title, $system_info_title, 'manage_options', 'system-info', 'rwtSystemInfo');
     add_submenu_page('wp_developers_toolbox', $database_export_title, $database_export_title, 'manage_options', 'database-info', 'rwtDatabaseExport');
 }
 add_action('admin_menu', 'rwt_wp_dev_tool_box_menu');
-
 // Add menu to the WP admin bar
 function rwt_debug_switch_menu()
 {
@@ -306,7 +292,6 @@ function rwt_debug_switch_menu()
     $debug_false_label = __('OFF', ‘wp-debug-switcher’);
     $public_view_errors_true_label = __('SHOW', ‘wp-debug-switcher’);
     $public_view_errors_false_label = __('HIDE', ‘wp-debug-switcher’);
-
     if ($rwt_toolbox->debug_mode == 'true') {
         $debug_toggle = $debug_false_label;
     } else {
@@ -317,7 +302,6 @@ function rwt_debug_switch_menu()
     } else {
         $admin_bar_toggle = $public_view_errors_true_label;
     }
-
     $menu_id = 'debug_switch';
     $wp_admin_bar->add_menu(array('id' => $menu_id, 'title' => __('Developer\'s Toolbox', ‘wp-debug-switcher’), 'href' => admin_url('options-general.php?page=wp_developers_toolbox')));
     $wp_admin_bar->add_menu(array('parent' => $menu_id, 'title' => __('Developer\'s Toolbox : Options', ‘wp-debug-switcher’), 'id' => 'debug_switch_options', 'href' =>  admin_url('options-general.php?page=wp_developers_toolbox')));
@@ -326,4 +310,4 @@ function rwt_debug_switch_menu()
 }
 add_action('admin_bar_menu', 'rwt_debug_switch_menu', 2000);
 $rwt_toolbox_utilities = new rwtDevToolbox();
-$rwt_toolbox_utilities->rwt_toolbox_switcher();
+$rwt_toolbox_utilities->rwtToolboxSwitcher();
