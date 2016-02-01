@@ -1,4 +1,4 @@
-=== WP Developers Toolbox ===
+=== WP Developer's Toolbox ===
 Contributors: James-Read
 Donate link: https://readwebtechnology.com/
 Tags: Developer tools system info php export database
@@ -9,23 +9,24 @@ License: GPLv2 or later
 License URI: http://readwebtechnology.com
 
 
-Provides a direction aware hover effect and custom code generator.
+"Great for turning DEBUG mode on and off - quickly!"
 
 
 == Description ==
 
-This handy plugin speeds up some tasks when developing web applications, websites and plugins with WordPress.
+This handy plugin speeds up some debugging actions; when developing web applications, websites and plugins with WordPress.
 
 For more information visit : https://readwebtechnology.com/wp-developers-tool-box/
 
 
-* Toggle error printing and logging on and off from the dashboard and the WP Admin bar *
-* Rename the plugins directory to quickly ascertain if the error is in a plugin. *
-* Toggle the WP Admin bar display on and off, from the WP Admin bar and dashboard *
-* Show System info using phpinfo *
-* Export the database to a .htaccess protected directory *
-
-
+* Toggle error reporting messages on and off from the dashboard and the WP Admin bar
+* Toggle error logging on and off from the dashboard
+* Choose if to display errors only to logged in Administrators
+* Choose if to display errors only to visitors from a whitelisted IP
+* Quickly and safely rename the "/plugins" directory from the dashboard; to ascertain if the error is in a plugin, or not
+* Toggle the WP Admin bar to display on or off, from the WP Admin bar and dashboard
+* Show System info using phpinfo
+* Qucikly export the active database, with a conditional drop statement; to a .htaccess protected directory
 
 
 == Installation ==
@@ -65,6 +66,10 @@ A: See Installation section!
 = 0.1 =
 
 * Initial launch of the plugin
+
+= 1.0 =
+
+* Added IP whitelisting
 
 
 == Upgrade Notice ==
